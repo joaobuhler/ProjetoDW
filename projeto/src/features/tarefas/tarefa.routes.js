@@ -1,4 +1,4 @@
-// @file: src/features/tarefas/tarefa.routes.js
+
 
 import TarefaRepository from './tarefa.repository.js'
 import TarefaService from './tarefa.service.js'
@@ -10,6 +10,7 @@ export default async function tarefaRoutes(server) {
   const repository = new TarefaRepository()
   const service = new TarefaService(repository)
   const controller = new TarefaController(service)
+
 
   server.get('/tarefas', async (request, reply) => {
     console.log("Routes: GET /tarefas chamada")
@@ -26,6 +27,7 @@ export default async function tarefaRoutes(server) {
     controller.obterResumo(request, reply)
   })
 
+  // /tarefas/pendentes DEVE vir antes de /tarefas/:id
   server.get('/tarefas/pendentes', async (request, reply) => {
     console.log("Routes: GET /tarefas/pendentes chamada")
     controller.obterPendentes(request, reply)

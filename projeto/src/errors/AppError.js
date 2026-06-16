@@ -1,4 +1,4 @@
-// @file: src/errors/AppError.js
+
 
 export class AppError extends Error {
   constructor(message, statusCode = 400) {

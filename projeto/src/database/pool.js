@@ -1,4 +1,4 @@
-// @file: src/database/pool.js
+
 
 import { Pool } from 'pg'
 

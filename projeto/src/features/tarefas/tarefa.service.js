@@ -1,4 +1,3 @@
-// @file: src/features/tarefas/tarefa.service.js
 
 import { AppError } from '../../errors/AppError.js'
 
@@ -27,11 +26,18 @@ class TarefaService {
     return resultado
   }
 
-  async criar(descricao) {
+  async criar(dados) {
     console.log("Service: criar chamado")
+
+    const descricao = typeof dados === 'string' ? dados : dados.descricao
+    const projetoId = typeof dados === 'object' ? dados.projetoId : undefined
 
     if (!descricao || descricao.trim() === '') {
       throw new AppError('A descrição da tarefa é obrigatória', 400)
+    }
+
+    if (!projetoId) {
+      throw new AppError('O projeto da tarefa é obrigatório', 400)
     }
 
     const tarefas = await this.repository.buscarTodos()
@@ -43,8 +49,11 @@ class TarefaService {
       throw new AppError('Já existe uma tarefa com essa descrição', 400)
     }
 
-    const novaTarefa = await this.repository.salvar({ descricao, concluido: false })
-    return novaTarefa
+    return this.repository.salvar({
+      descricao: descricao.trim(),
+      concluido: false,
+      projetoId
+    })
   }
 
   async buscarPorId(id) {
@@ -60,7 +69,7 @@ class TarefaService {
 
   async atualizar(id, dadosAtualizados) {
     console.log("Service: atualizar chamado")
-    const tarefa = await this.buscarPorId(id)
+    const tarefa = await this.buscarPorId(id) 
 
     if (tarefa.concluido) {
       throw new AppError('Não é possível atualizar uma tarefa já concluída', 400)
@@ -78,7 +87,7 @@ class TarefaService {
 
   async remover(id) {
     console.log("Service: remover chamado")
-    const tarefa = await this.buscarPorId(id)
+    const tarefa = await this.buscarPorId(id) 
 
     if (tarefa.concluido) {
       throw new AppError('Não é possível remover uma tarefa já concluída', 400)

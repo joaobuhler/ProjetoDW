@@ -4,6 +4,7 @@ import Fastify from 'fastify'
 import cors from '@fastify/cors'
 
 import tarefaRoutes from './src/features/tarefas/tarefa.routes.js'
+import projetoRoutes from './src/features/projetos/projeto.routes.js'
 import { AppError } from './src/errors/AppError.js'
 import pool from './src/database/pool.js'
 
@@ -31,6 +32,7 @@ server.setErrorHandler((error, request, reply) => {
 })
 
 server.register(tarefaRoutes)
+server.register(projetoRoutes)
 
 server.setNotFoundHandler((request, reply) => {
   reply.code(404).send({
@@ -43,7 +45,6 @@ const PORT = 3000
 
 const start = async () => {
   try {
-    
     await pool.query('SELECT 1')
     console.log('Conectado ao PostgreSQL com sucesso')
 
